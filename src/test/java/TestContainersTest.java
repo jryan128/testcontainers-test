@@ -2,6 +2,7 @@ import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 
@@ -10,7 +11,7 @@ public class TestContainersTest {
     void test() throws InterruptedException {
 //        try (GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis")).withExposedPorts(6379)) {
         GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis"))
-                .withNetworkAliases("concourse-default")
+                .withNetwork(Network.builder().id("concourse-default").build())
                 .withExposedPorts(6379);
             redis.start();
             redis.waitingFor(Wait.forListeningPort());
