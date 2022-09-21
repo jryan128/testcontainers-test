@@ -3,8 +3,13 @@ import io.lettuce.core.api.StatefulRedisConnection;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
+import org.testcontainers.containers.startupcheck.IsRunningStartupCheckStrategy;
+import org.testcontainers.containers.startupcheck.StartupCheckStrategy;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.containers.wait.strategy.WaitStrategy;
 import org.testcontainers.utility.DockerImageName;
+
+import java.time.Duration;
 
 public class TestContainersTest {
     @Test
@@ -12,10 +17,10 @@ public class TestContainersTest {
 //        try (GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis")).withExposedPorts(6379)) {
         GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis"))
                 .withNetworkMode("concourse_default")
+//                .withCreateContainerCmdModifier(cmd -> cmd.withName("redis"))
                 .withExposedPorts(6379);
             redis.start();
-            redis.waitingFor(Wait.forListeningPort());
-            try (var redisClient = RedisClient.create("redis://localhost:%d/0".formatted(redis.getMappedPort(6379)))) {
+            try (var redisClient = RedisClient.create("redis://localhost: " + redis.getFirstMappedPort())) {
                 StatefulRedisConnection<String, String> connection = redisClient.connect();
                 System.out.println(connection.sync().info());
             }
