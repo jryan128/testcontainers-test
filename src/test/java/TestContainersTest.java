@@ -11,8 +11,7 @@ public class TestContainersTest {
     void test() throws InterruptedException {
 //        try (GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis")).withExposedPorts(6379)) {
         GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis"))
-                .withNetworkMode("container:6566187da736")
-                .withExposedPorts(6379);
+                .withNetworkMode("concourse-default");
             redis.start();
             redis.waitingFor(Wait.forListeningPort());
             try (var redisClient = RedisClient.create("redis://localhost:%d/0".formatted(redis.getMappedPort(6379)))) {
