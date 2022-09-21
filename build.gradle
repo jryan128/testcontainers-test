@@ -14,6 +14,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
     testImplementation "org.testcontainers:junit-jupiter:1.17.3"
     implementation 'io.lettuce:lettuce-core:6.2.0.RELEASE'
+    implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
+    testImplementation 'org.slf4j:slf4j-simple:2.0.1'
 }
 
 test {
